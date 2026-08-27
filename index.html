@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CraveLess — Craving Support</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+        background: #f5f7fb;
+        color: #172033;
+        min-height: 100vh;
+    }
+
+    /* NAVBAR */
+    nav {
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 7%;
+        background: rgba(255,255,255,0.9);
+        border-bottom: 1px solid #e7eaf0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(15px);
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 21px;
+        font-weight: 800;
+    }
+
+    .logo-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: #5b63f5;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+    }
+
+    .nav-status {
+        font-size: 13px;
+        color: #697386;
+        background: #f1f3f8;
+        padding: 8px 14px;
+        border-radius: 20px;
+    }
+
+    /* MAIN */
+    main {
+        width: 100%;
+        max-width: 850px;
+        margin: auto;
+        padding: 55px 20px 80px;
+    }
+
+    .hero {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 20px;
+        background: #eceeff;
+        color: #5159df;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .hero h1 {
+        font-size: clamp(34px, 6vw, 55px);
+        line-height: 1.05;
+        letter-spacing: -2px;
+        margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+        color: #5b63f5;
+    }
+
+    .hero p {
+        max-width: 570px;
+        margin: auto;
+        color: #697386;
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    /* CARD */
+    .card {
+        background: white;
+        border: 1px solid #e7eaf0;
+        border-radius: 26px;
+        padding: 35px;
+        box-shadow: 0 18px 50px rgba(27, 35, 65, 0.07);
+    }
+
+    /* PROGRESS */
+    .progress-area {
+        margin-bottom: 35px;
+    }
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #7b8495;
+        margin-bottom: 9px;
+    }
+
+    .progress-track {
+        width: 100%;
+        height: 7px;
+        background: #edf0f5;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        width: 20%;
+        height: 100%;
+        background: #5b63f5;
+        border-radius: 10px;
+        transition: 0.35s ease;
+    }
+
+    /* QUESTIONS */
+    .question {
+        display: none;
+        animation: fadeIn 0.35s ease;
+    }
+
+    .question.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .question-number {
+        font-size: 12px;
+        color: #5b63f5;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .question h2 {
+        font-size: 29px;
+        letter-spacing: -0.7px;
+        margin-bottom: 9px;
+    }
+
+    .question-description {
+        color: #7a8495;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    /* OPTIONS */
+    .options {
+        display: grid;
+        gap: 12px;
+    }
+
+    .option {
+        width: 100%;
+        border: 1px solid #e1e5ec;
+        background: white;
+        border-radius: 15px;
+        padding: 17px;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.2s ease;
+        font-size: 15px;
+        color: #20283a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .option:hover {
+        border-color: #8d94ff;
+        background: #f8f8ff;
+        transform: translateY(-1px);
+    }
+
+    .option.selected {
+        border-color: #5b63f5;
+        background: #f0f1ff;
+        box-shadow: 0 0 0 3px rgba(91,99,245,0.1);
+    }
+
+    .option-left {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .option-icon {
+        width: 40px;
+        height: 40px;
+        background: #f1f3f8;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .option.selected .option-icon {
+        background: #5b63f5;
+        color: white;
+    }
+
+    .arrow {
+        color: #a3aaba;
+        font-size: 20px;
+    }
+
+    /* SLIDER */
+    .slider-box {
+        padding: 20px 0;
+    }
+
+    .craving-number {
+        text-align: center;
+        font-size: 68px;
+        font-weight: 800;
+        color: #5b63f5;
+        margin-bottom: 5px;
+    }
+
+    .craving-label {
+        text-align: center;
+        color: #778092;
+        margin-bottom: 30px;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        accent-color: #5b63f5;
+        cursor: pointer;
+    }
+
+    .range-labels {
+        display: flex;
+        justify-content: space-between;
+        color: #8a93a3;
+        font-size: 12px;
+        margin-top: 9px;
+    }
+
+    /* BUTTONS */
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 12px;
+    }
+
+    button {
+        font-family: inherit;
+    }
+
+    .btn {
+        border: none;
+        padding: 14px 22px;
+        border-radius: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        background: #5b63f5;
+        color: white;
+        margin-left: auto;
+    }
+
+    .btn-primary:hover {
+        background: #4c54df;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background: #f0f2f6;
+        color: #555f71;
+    }
+
+    .btn-secondary:hover {
+        background: #e5e8ee;
+    }
+
+    /* RESULT */
+    #result {
+        display: none;
+    }
+
+    .result-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .result-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 18px;
+        border-radius: 22px;
+        background: #e9f8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+    }
+
+    .result-header h2 {
+        font-size: 31px;
+        margin-bottom: 10px;
+    }
+
+    .result-header p {
+        color: #737d8e;
+        line-height: 1.6;
+    }
+
+    .summary {
+        background: #f6f7fb;
+        border-radius: 18px;
+        padding: 18px;
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 10px;
+        margin-bottom: 28px;
+    }
+
+    .summary-item {
+        text-align: center;
+    }
+
+    .summary-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #8a93a3;
+        margin-bottom: 5px;
+    }
+
+    .summary-value {
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    /* STRATEGIES */
+    .section-title {
+        font-size: 17px;
+        margin-bottom: 14px;
+    }
+
+    .strategy {
+        border: 1px solid #e4e7ee;
+        border-radius: 17px;
+        padding: 18px;
+        margin-bottom: 12px;
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        transition: 0.2s;
+    }
+
+    .strategy:hover {
+        border-color: #b8bcff;
+        transform: translateY(-1px);
+    }
+
+    .strategy-icon {
+        width: 45px;
+        min-width: 45px;
+        height: 45px;
+        border-radius: 13px;
+        background: #eef0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+    }
+
+    .strategy h3 {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    .strategy p {
+        color: #707a8b;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .try-btn {
+        margin-left: auto;
+        border: none;
+        background: #eef0ff;
+        color: #555de5;
+        padding: 8px 11px;
+        border-radius: 9px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    /* TIMER */
+    .timer {
+        display: none;
+        text-align: center;
+        margin-top: 20px;
+        padding: 28px;
+        background: #f5f6ff;
+        border-radius: 18px;
+    }
+
+    .timer h3 {
+        margin-bottom: 12px;
+    }
+
+    .timer-circle {
+        font-size: 45px;
+        font-weight: 800;
+        color: #5b63f5;
+        margin: 12px;
+    }
+
+    .timer-text {
+        color: #70798a;
+        font-size: 13px;
+    }
+
+    /* CHECK IN */
+    .checkin {
+        margin-top: 30px;
+        background: #f7f8fb;
+        border-radius: 19px;
+        padding: 22px;
+    }
+
+    .checkin h3 {
+        margin-bottom: 14px;
+    }
+
+    .check-options {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+    }
+
+    .check-option {
+        border: 1px solid #dfe3ea;
+        background: white;
+        border-radius: 10px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .check-option:hover {
+        border-color: #737bf2;
+    }
+
+    /* SUPPORT */
+    .support {
+        margin-top: 18px;
+        padding: 20px;
+        border-radius: 17px;
+        background: #fff8ed;
+        border: 1px solid #f3e1bd;
+    }
+
+    .support h3 {
+        font-size: 15px;
+        margin-bottom: 6px;
+    }
+
+    .support p {
+        color: #756c5c;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    /* FOOTER */
+    footer {
+        text-align: center;
+        padding: 20px;
+        color: #9aa2b1;
+        font-size: 12px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:600px) {
+        nav {
+            padding: 0 20px;
+        }
+
+        .nav-status {
+            display: none;
+        }
+
+        main {
+            padding: 35px 14px 60px;
+        }
+
+        .card {
+            padding: 23px;
+            border-radius: 21px;
+        }
+
+        .question h2 {
+            font-size: 25px;
+        }
+
+        .summary {
+            grid-template-columns: 1fr;
+        }
+
+        .buttons {
+            margin-top: 22px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">
+        <div class="logo-icon">✦</div>
+        CraveLess
+    </div>
+    <div class="nav-status">Your moment matters</div>
+</nav>
+
+<main>
+
+    <section class="hero">
+        <div class="hero-badge">● CRAVING SUPPORT</div>
+        <h1>Ride the craving.<br><span>Don't let it ride you.</span></h1>
+        <p>
+            Tell us what you're experiencing right now.
+            We'll suggest a few simple, healthy ways to get through the moment.
+        </p>
+    </section>
+
+    <div class="card">
+
+        <!-- QUESTIONS -->
+
+        <div id="questionnaire">
+
+            <div class="progress-area">
+                <div class="progress-info">
+                    <span id="progressText">Question 1 of 5</span>
+                    <span id="progressPercent">20%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+
+            <!-- Q1 -->
+            <div class="question active" data-question="1">
+                <div class="question-number">01 / Craving type</div>
+                <h2>What are you craving?</h2>
+                <p class="question-description">
+                    There is no judgment here. Just choose what best describes the moment.
+                </p>
+
+                <div class="options">
+
+                    <button class="option" onclick="selectOption(this,'substance','Smoking / nicotine')">
+                        <div class="option-left">
+                            <div class="option-icon">🚭</div>
+                            <span>Smoking / nicotine</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'substance','Alcohol')">
+                        <div class="option-left">
+                            <div class="option-icon">🥤</div>
+                            <span>Alcohol</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'substance','Another substance')">
+                        <div class="option-left">
+                            <div class="option-icon">🧠</div>
+                            <span>Another substance</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'substance','Something else')">
+                        <div class="option-left">
+                            <div class="option-icon">💭</div>
+                            <span>Something else</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="question" data-question="2">
+                <div class="question-number">02 / Intensity</div>
+                <h2>How strong is the craving?</h2>
+                <p class="question-description">
+                    Move the slider to the number that feels closest right now.
+                </p>
+
+                <div class="slider-box">
+                    <div class="craving-number" id="cravingNumber">5</div>
+                    <div class="craving-label" id="cravingLabel">Moderate</div>
+
+                    <input
+                        type="range"
+                        min="1"
+                        max="10"
+                        value="5"
+                        id="cravingSlider"
+                        oninput="updateCraving()"
+                    >
+
+                    <div class="range-labels">
+                        <span>1 — Very low</span>
+                        <span>10 — Very strong</span>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousQuestion()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextQuestion()">Continue →</button>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="question" data-question="3">
+                <div class="question-number">03 / Timing</div>
+                <h2>When did the craving start?</h2>
+                <p class="question-description">
+                    This helps us understand how long you've been dealing with it.
+                </p>
+
+                <div class="options">
+
+                    <button class="option" onclick="selectOption(this,'timing','Just now')">
+                        <div class="option-left">
+                            <div class="option-icon">⚡</div>
+                            <span>Just now</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'timing','5–15 minutes ago')">
+                        <div class="option-left">
+                            <div class="option-icon">🕐</div>
+                            <span>5–15 minutes ago</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'timing','15–30 minutes ago')">
+                        <div class="option-left">
+                            <div class="option-icon">🕑</div>
+                            <span>15–30 minutes ago</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'timing','More than 30 minutes ago')">
+                        <div class="option-left">
+                            <div class="option-icon">🕒</div>
+                            <span>More than 30 minutes ago</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="question" data-question="4">
+                <div class="question-number">04 / Trigger</div>
+                <h2>What triggered it?</h2>
+                <p class="question-description">
+                    Understanding the trigger can help us choose a better strategy.
+                </p>
+
+                <div class="options">
+
+                    <button class="option" onclick="selectOption(this,'trigger','Stress')">
+                        <div class="option-left">
+                            <div class="option-icon">😣</div>
+                            <span>Stress</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'trigger','Boredom')">
+                        <div class="option-left">
+                            <div class="option-icon">😐</div>
+                            <span>Boredom</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'trigger','Friends / social situation')">
+                        <div class="option-left">
+                            <div class="option-icon">👥</div>
+                            <span>Friends / social situation</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'trigger','Anger / sadness')">
+                        <div class="option-left">
+                            <div class="option-icon">🌧️</div>
+                            <span>Anger / sadness</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'trigger','Habit / routine')">
+                        <div class="option-left">
+                            <div class="option-icon">🔄</div>
+                            <span>Habit / routine</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'trigger','Seeing someone else use it')">
+                        <div class="option-left">
+                            <div class="option-icon">👀</div>
+                            <span>Seeing someone else use it</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="question" data-question="5">
+                <div class="question-number">05 / Your goal</div>
+                <h2>What do you need right now?</h2>
+                <p class="question-description">
+                    Pick the kind of support that would be most useful.
+                </p>
+
+                <div class="options">
+
+                    <button class="option" onclick="selectOption(this,'need','Distract me')">
+                        <div class="option-left">
+                            <div class="option-icon">🎧</div>
+                            <span>Distract me</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'need','Help me calm down')">
+                        <div class="option-left">
+                            <div class="option-icon">🌿</div>
+                            <span>Help me calm down</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'need','Help me understand my craving')">
+                        <div class="option-left">
+                            <div class="option-icon">🧠</div>
+                            <span>Help me understand my craving</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'need','Help me contact someone')">
+                        <div class="option-left">
+                            <div class="option-icon">📱</div>
+                            <span>Help me contact someone</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                    <button class="option" onclick="selectOption(this,'need','Help me find professional support')">
+                        <div class="option-left">
+                            <div class="option-icon">🩺</div>
+                            <span>Help me find professional support</span>
+                        </div>
+                        <span class="arrow">›</span>
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div id="result">
+
+            <div class="result-header">
+                <div class="result-icon">🌱</div>
+                <h2>Let's get through this moment.</h2>
+                <p id="resultMessage">
+                    Your craving is temporary. Here are a few safe strategies you can try right now.
+                </p>
+            </div>
+
+            <div class="summary">
+                <div class="summary-item">
+                    <div class="summary-label">Craving</div>
+                    <div class="summary-value" id="summarySubstance">—</div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-label">Intensity</div>
+                    <div class="summary-value" id="summaryIntensity">—</div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-label">Trigger</div>
+                    <div class="summary-value" id="summaryTrigger">—</div>
+                </div>
+            </div>
+
+            <h3 class="section-title">Try one of these now</h3>
+
+            <div id="strategies"></div>
+
+            <!-- TIMER -->
+            <div class="timer" id="timerBox">
+                <h3>Take a short breathing break</h3>
+                <div class="timer-circle" id="timerNumber">60</div>
+                <div class="timer-text" id="timerInstruction">
+                    Breathe in slowly...
+                </div>
+            </div>
+
+            <div class="checkin">
+                <h3>Check in after trying a strategy</h3>
+                <div class="check-options">
+                    <button class="check-option" onclick="checkIn('Still strong')">
+                        Still strong
+                    </button>
+
+                    <button class="check-option" onclick="checkIn('A little better')">
+                        A little better
+                    </button>
+
+                    <button class="check-option" onclick="checkIn('Much better')">
+                        Much better
+                    </button>
+                </div>
+            </div>
+
+            <div class="support">
+                <h3>Need more support?</h3>
+                <p>
+                    If cravings feel difficult to manage, consider talking with a
+                    trusted adult, healthcare professional, counselor, or another
+                    support person. You don't have to handle difficult moments alone.
+                </p>
+            </div>
+
+            <div class="buttons">
+                <button class="btn btn-secondary" onclick="restart()">
+                    ↻ Start over
+                </button>
+
+                <button class="btn btn-primary" onclick="anotherStrategy()">
+                    Try another strategy
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    CraveLess • A supportive tool for managing difficult moments
+</footer>
+
+
+<script>
+
+let currentQuestion = 1;
+
+let answers = {
+    substance: "",
+    intensity: 5,
+    timing: "",
+    trigger: "",
+    need: ""
+};
+
+const questions = document.querySelectorAll(".question");
+
+function updateProgress() {
+
+    const percent = currentQuestion * 20;
+
+    document.getElementById("progressBar").style.width = percent + "%";
+    document.getElementById("progressText").innerText =
+        "Question " + currentQuestion + " of 5";
+
+    document.getElementById("progressPercent").innerText =
+        percent + "%";
+}
+
+
+function selectOption(element, category, value) {
+
+    const parent = element.parentElement;
+
+    parent.querySelectorAll(".option").forEach(option => {
+        option.classList.remove("selected");
+    });
+
+    element.classList.add("selected");
+
+    answers[category] = value;
+
+    setTimeout(() => {
+
+        if (currentQuestion < 5) {
+            nextQuestion();
+        } else {
+            showResult();
+        }
+
+    }, 250);
+}
+
+
+function nextQuestion() {
+
+    if (currentQuestion < 5) {
+
+        questions[currentQuestion - 1].classList.remove("active");
+
+        currentQuestion++;
+
+        questions[currentQuestion - 1].classList.add("active");
+
+        updateProgress();
+    }
+}
+
+
+function previousQuestion() {
+
+    if (currentQuestion > 1) {
+
+        questions[currentQuestion - 1].classList.remove("active");
+
+        currentQuestion--;
+
+        questions[currentQuestion - 1].classList.add("active");
+
+        updateProgress();
+    }
+}
+
+
+function updateCraving() {
+
+    const value = document.getElementById("cravingSlider").value;
+
+    answers.intensity = Number(value);
+
+    document.getElementById("cravingNumber").innerText = value;
+
+    let label = "";
+
+    if (value <= 2) {
+        label = "Very low";
+    } else if (value <= 4) {
+        label = "Low";
+    } else if (value <= 6) {
+        label = "Moderate";
+    } else if (value <= 8) {
+        label = "Strong";
+    } else {
+        label = "Very strong";
+    }
+
+    document.getElementById("cravingLabel").innerText = label;
+}
+
+
+function showResult() {
+
+    document.getElementById("questionnaire").style.display = "none";
+
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("summarySubstance").innerText =
+        answers.substance;
+
+    document.getElementById("summaryIntensity").innerText =
+        answers.intensity + " / 10";
+
+    document.getElementById("summaryTrigger").innerText =
+        answers.trigger;
+
+    createStrategies();
+
+    createMessage();
+}
+
+
+function createMessage() {
+
+    let message = "";
+
+    if (answers.intensity >= 8) {
+
+        message =
+            "This sounds like a strong craving. Let's focus on getting through the next few minutes rather than solving everything at once.";
+
+    } else if (answers.intensity >= 5) {
+
+        message =
+            "Your craving is noticeable right now. A short change of activity or environment may help you ride out the moment.";
+
+    } else {
+
+        message =
+            "Your craving is relatively low right now. This can be a good opportunity to interrupt the pattern before it gets stronger.";
+    }
+
+    document.getElementById("resultMessage").innerText = message;
+}
+
+
+function createStrategies() {
+
+    const container = document.getElementById("strategies");
+
+    container.innerHTML = "";
+
+    let strategies = [];
+
+    /* NEED-BASED STRATEGIES */
+
+    if (answers.need === "Help me calm down") {
+
+        strategies.push({
+            icon: "🌬️",
+            title: "60-second breathing reset",
+            text: "Slow your breathing and put your attention on the present moment.",
+            timer: true
+        });
+
+        strategies.push({
+            icon: "🚶",
+            title: "Change your environment",
+            text: "Move to another room or step outside for a few minutes if it is safe to do so."
+        });
+
+        strategies.push({
+            icon: "💧",
+            title: "Drink some water",
+            text: "Take a few slow sips of water and give yourself a short pause."
+        });
+    }
+
+    else if (answers.need === "Distract me") {
+
+        strategies.push({
+            icon: "🎧",
+            title: "Put on music",
+            text: "Choose a song or playlist and focus on the music for the next few minutes."
+        });
+
+        strategies.push({
+            icon: "🧩",
+            title: "Do a quick activity",
+            text: "Try a puzzle, drawing, game, organizing your desk, or another safe activity."
+        });
+
+        strategies.push({
+            icon: "🚶",
+            title: "Take a short walk",
+            text: "Change your surroundings and focus on what you see and hear around you."
+        });
+    }
+
+    else if (answers.need === "Help me understand my craving") {
+
+        strategies.push({
+            icon: "🧠",
+            title: "Name the trigger",
+            text: "Notice what happened immediately before the craving appeared."
+        });
+
+        strategies.push({
+            icon: "⏳",
+            title: "Give it some time",
+            text: "Remind yourself that a craving is a feeling that can rise and fall."
+        });
+
+        strategies.push({
+            icon: "📝",
+            title: "Write it down",
+            text: "Write one sentence about what you are feeling and what you think you need."
+        });
+    }
+
+    else if (answers.need === "Help me contact someone") {
+
+        strategies.push({
+            icon: "📱",
+            title: "Contact someone you trust",
+            text: "Send a simple message saying you could use some company or support right now."
+        });
+
+        strategies.push({
+            icon: "👥",
+            title: "Stay around supportive people",
+            text: "If possible, spend time somewhere you feel safe and supported."
+        });
+
+        strategies.push({
+            icon: "💬",
+            title: "Talk about the trigger",
+            text: "You don't need to explain everything. Start by saying how you're feeling."
+        });
+    }
+
+    else if (answers.need === "Help me find professional support") {
+
+        strategies.push({
+            icon: "🩺",
+            title: "Talk to a professional",
+            text: "A doctor, counselor, therapist, or addiction-support professional can help you build a longer-term plan."
+        });
+
+        strategies.push({
+            icon: "👨‍👩‍👧",
+            title: "Tell a trusted adult",
+            text: "If you're under 18, consider talking to a parent, guardian, school counselor, teacher, or another trusted adult."
+        });
+
+        strategies.push({
+            icon: "📋",
+            title: "Track your triggers",
+            text: "Recording when cravings happen can help a professional understand patterns and provide better support."
+        });
+    }
+
+    /* TRIGGER-SPECIFIC EXTRA */
+
+    if (answers.trigger === "Stress") {
+
+        strategies.push({
+            icon: "🫁",
+            title: "Pause and reset",
+            text: "Take a short break from whatever is stressing you and focus on slow, steady breathing."
+        });
+    }
+
+    if (answers.trigger === "Boredom") {
+
+        strategies.push({
+            icon: "🎨",
+            title: "Switch activities",
+            text: "Choose something engaging: draw, read, play a game, clean something, or work on a hobby."
+        });
+    }
+
+    if (answers.trigger === "Friends / social situation" ||
+        answers.trigger === "Seeing someone else use it") {
+
+        strategies.push({
+            icon: "🚪",
+            title: "Create some distance",
+            text: "If possible, move away from the situation or people who are increasing the craving."
+        });
+    }
+
+    if (answers.trigger === "Habit / routine") {
+
+        strategies.push({
+            icon: "🔄",
+            title: "Break the routine",
+            text: "Do something different from what you normally do at this time or in this location."
+        });
+    }
+
+    if (answers.trigger === "Anger / sadness") {
+
+        strategies.push({
+            icon: "💭",
+            title: "Let the feeling out safely",
+            text: "Talk to someone you trust, write your thoughts down, or use another safe way to process the emotion."
+        });
+    }
+
+    /* SHOW MAX 5 */
+
+    strategies = strategies.slice(0, 5);
+
+    strategies.forEach(strategy => {
+
+        const div = document.createElement("div");
+
+        div.className = "strategy";
+
+        div.innerHTML = `
+            <div class="strategy-icon">${strategy.icon}</div>
+
+            <div style="flex:1">
+                <h3>${strategy.title}</h3>
+                <p>${strategy.text}</p>
+            </div>
+
+            ${
+                strategy.timer
+                ?
+                `<button class="try-btn" onclick="startTimer()">START</button>`
+                :
+                ""
+            }
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+
+let timerInterval;
+
+function startTimer() {
+
+    clearInterval(timerInterval);
+
+    const timerBox = document.getElementById("timerBox");
+
+    timerBox.style.display = "block";
+
+    let seconds = 60;
+
+    const number = document.getElementById("timerNumber");
+
+    const instruction = document.getElementById("timerInstruction");
+
+    number.innerText = seconds;
+
+    instruction.innerText = "Breathe in slowly...";
+
+    timerInterval = setInterval(() => {
+
+        seconds--;
+
+        number.innerText = seconds;
+
+        if (seconds > 45) {
+            instruction.innerText = "Breathe in slowly...";
+        }
+
+        else if (seconds > 30) {
+            instruction.innerText = "Breathe out slowly...";
+        }
+
+        else if (seconds > 15) {
+            instruction.innerText = "Relax your shoulders...";
+        }
+
+        else if (seconds > 0) {
+            instruction.innerText = "Keep breathing slowly...";
+        }
+
+        else {
+
+            clearInterval(timerInterval);
+
+            number.innerText = "✓";
+
+            instruction.innerText =
+                "Nice work. Notice how you feel now.";
+        }
+
+    }, 1000);
+}
+
+
+function anotherStrategy() {
+
+    const strategies = document.querySelectorAll(".strategy");
+
+    strategies.forEach((strategy, index) => {
+
+        strategy.style.opacity = "0";
+
+        setTimeout(() => {
+            strategy.style.opacity = "1";
+        }, index * 80);
+    });
+
+    /* Shuffle strategy order */
+
+    const container = document.getElementById("strategies");
+
+    const items = Array.from(container.children);
+
+    items.sort(() => Math.random() - 0.5);
+
+    items.forEach(item => container.appendChild(item));
+}
+
+
+function checkIn(feeling) {
+
+    const check = document.querySelector(".checkin");
+
+    check.innerHTML = `
+        <h3>Thanks for checking in.</h3>
+        <p style="color:#70798a;font-size:13px;margin-top:6px">
+            You selected: <strong>${feeling}</strong>
+        </p>
+        <p style="color:#70798a;font-size:13px;margin-top:8px">
+            Keep giving yourself time and space. If the craving remains difficult
+            to manage, consider reaching out to someone you trust or a professional.
+        </p>
+    `;
+}
+
+
+function restart() {
+
+    clearInterval(timerInterval);
+
+    currentQuestion = 1;
+
+    answers = {
+        substance: "",
+        intensity: 5,
+        timing: "",
+        trigger: "",
+        need: ""
+    };
+
+    document.getElementById("questionnaire").style.display = "block";
+
+    document.getElementById("result").style.display = "none";
+
+    document.getElementById("timerBox").style.display = "none";
+
+    questions.forEach(question => {
+        question.classList.remove("active");
+    });
+
+    questions[0].classList.add("active");
+
+    document.querySelectorAll(".option").forEach(option => {
+        option.classList.remove("selected");
+    });
+
+    document.getElementById("cravingSlider").value = 5;
+
+    updateCraving();
+    updateProgress();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+updateProgress();
+updateCraving();
+
+</script>
+</body>
+</html>
